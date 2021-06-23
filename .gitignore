@@ -1,0 +1,11 @@
+# Editor
+.vscode/
+
+# Build
+dist/
+
+# NPM
+node_modules
+
+# Keys
+.env
