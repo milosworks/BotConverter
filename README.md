@@ -3,11 +3,11 @@
 		src="https://vyrekxd.is-inside.me/6tDo7FK4.png"
 		class="logo"
 		alt="logo"
+		width="400"
+		height="400"
 		style="
 			border-radius: 9999px;
 			border-width: 1000px;
-			width: 400px;
-			height: 400px;
 			box-shadow: 0 0 transparent, 0 0 #0000, 0 0 transparent, 0 0 #0000,
 				0 25px 50px -12px rgba(0, 0, 0, 0.25);
 		"
