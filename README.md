@@ -1,17 +1,14 @@
-<div class="container" align="center">
+<div class="container" align="center" style="align-items: center; text-align: center;">
 	<img
 		src="https://vyrekxd.is-inside.me/6tDo7FK4.png"
 		class="logo"
 		alt="logo"
-		width="400"
-		height="400"
-		style="
-			border-radius: 9999px;
-			border-width: 1000px;
-			box-shadow: 0 0 transparent, 0 0 #0000, 0 0 transparent, 0 0 #0000,
-				0 25px 50px -12px rgba(0, 0, 0, 0.25);
-		"
+		width="300"
+		height="300"
+		style="border-width: 1000px; box-shadow: 0 0 transparent, 0 0 #0000, 0 0 transparent, 0 0 #0000, 0 25px 50px -12px rgba(0, 0, 0, 0.25);"
 	/>
+	<br/>
+	<br/>
 	<a href="https://github.com/VyrekXD/BotConverter/issues">
 		<img
 			src="https://img.shields.io/github/issues-raw/VyrekXD/BotConverter?color=%23FF0000&label=open%20issues&logo=github&style=for-the-badge"
