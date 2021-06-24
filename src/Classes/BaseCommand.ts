@@ -78,6 +78,13 @@ export class BaseCommand {
 		this.HandlePermissions(options)
 	}
 
+	/* eslint-disable no-unused-vars, @typescript-eslint/ban-ts-comment, @typescript-eslint/no-unused-vars */
+
+	// @ts-ignore
+	run(ctx: KirbyContext): any {}
+
+	/* eslint-enable no-unused-vars, @typescript-eslint/ban-ts-comment, @typescript-eslint/no-unused-vars */
+
 	LostPermissions(
 		AllPerms: PermissionResolvable[],
 		member: GuildMember,

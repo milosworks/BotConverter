@@ -43,39 +43,43 @@ export class BaseSlashCommand extends BaseCommand {
 				)
 			) {
 				return context.embedRes(
-					`Me faltan estos permisos: \`${this.LostPermissions(
+					`I need this permissions: \`${this.LostPermissions(
 						this.botPermissions,
 						context.guild?.me as GuildMember
-					)}\``
+					)}\``,
+					'error'
 				)
 			} else if (this.botChannelPermissions.length) {
 				return context.embedRes(
-					`Me faltan estos permisos en este canal: \`${this.LostPermissions(
+					`I need this permissions in this channel: \`${this.LostPermissions(
 						this.botChannelPermissions,
 						context.guild?.me as GuildMember,
 						context.channel
-					)}\``
+					)}\``,
+					'error'
 				)
 			}
-		} else if (this.memberPermissions) {
+		} else if (this.memberPermissions.length) {
 			if (
 				!this.memberPermissions.some((x) =>
 					context.guild?.me?.permissions.has(x)
 				)
 			) {
 				return context.embedRes(
-					`Te faltan estos permisos: \`${this.LostPermissions(
+					`You need this permissions: \`${this.LostPermissions(
 						this.memberPermissions,
 						context.guild?.me as GuildMember
-					)}\``
+					)}\``,
+					'error'
 				)
 			} else if (this.memberChannelPermissions.length) {
 				return context.embedRes(
-					`Te faltan estos permisos en este canal: \`${this.LostPermissions(
+					`You need this permissions in this channel: \`${this.LostPermissions(
 						this.memberChannelPermissions,
 						context.guild?.me as GuildMember,
 						context.channel
-					)}\``
+					)}\``,
+					'error'
 				)
 			}
 		}

@@ -4,7 +4,7 @@ import { config as InitializeENV } from 'dotenv'
 if (!process.env.TOKEN) InitializeENV()
 
 export const Client = {
-	prefix: 'cb.',
+	prefix: '&',
 	support: 'https://discord.gg/gc2rRwVFUF',
 	invite: process.env.INVITE
 }
@@ -12,7 +12,7 @@ export const Client = {
 export const console = new KufaConsole({
 	timeZone: 'America/Mexico_City',
 	onlyHours: true,
-	format: '[§a%time%§r] [%prefix%§r] %message% %memory%',
+	format: '[§a%time%§r] [%prefix%§r] %message% §b%memory%§r',
 	log_prefix: '§2LOG',
 	warn_prefix: '§6WARN',
 	error_prefix: '§4ERROR',
