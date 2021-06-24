@@ -24,7 +24,8 @@
 		"@typescript-eslint/no-non-null-assertion": "off",
 		"@typescript-eslint/no-namespace": "off",
 		"@typescript-eslint/no-explicit-any": "off",
-		"semi": ["warn", "never"]
+		"semi": ["warn", "never"],
+		"no-mixed-spaces-and-tabs": "off"
 	},
 	"ignorePatterns": ["dist", "node_modules"]
 }
