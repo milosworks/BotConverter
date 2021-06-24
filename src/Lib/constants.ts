@@ -1,4 +1,4 @@
-import { KufaConsole } from 'kufa'
+﻿import { KufaConsole } from 'kufa'
 import { config as InitializeENV } from 'dotenv'
 
 if (!process.env.TOKEN) InitializeENV()
@@ -18,7 +18,7 @@ export const console = new KufaConsole({
 	error_prefix: '§4ERROR',
 	depth: Infinity,
 	parser: (ctx) => {
-		if (ctx.str.includes('error')) {
+		if (ctx.type === 'error') {
 			// Copied from kufa/src/Utils
 			const date = new Date()
 			let parsed = date.toLocaleString('es-MX', {

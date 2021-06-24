@@ -7,7 +7,8 @@
 	"scripts": {
 		"test": "nodemon -e \"ts\", --exec \"tsc && node .\"",
 		"build": "tsc",
-		"start": "node ."
+		"start": "node .",
+		"fix": "git add . && git commit -m \"🛠 Fix\" && git push origin main"
 	},
 	"keywords": [],
 	"author": "Vyrek",
