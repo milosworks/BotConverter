@@ -8,27 +8,24 @@ const { __dirname } = Commons(import.meta.url)
 
 export class Handlers {
 	client: ConverterClient
-	CommandsLoaded: number
-	EventsLoaded: number
 
 	constructor(client: ConverterClient) {
 		this.client = client
-		this.CommandsLoaded = 0
-		this.EventsLoaded = 0
 
 		this.Commands()
-			.then(() =>
-				console.log(`§c${this.CommandsLoaded}§r commands are loaded`)
+			.then((i) =>
+				console.log(`§c${i}§r commands are loaded`)
 			)
 			.catch(console.error)
 		this.Events()
-			.then(() =>
-				console.log(`§c${this.EventsLoaded}§r events are now listening`)
+			.then((i) =>
+				console.log(`§c${i}§r events are now listening`)
 			)
 			.catch(console.error)
 	}
 
-	private async Commands(dir = '../Commands'): Promise<void> {
+	private async Commands(dir = '../Commands'): Promise<number|void> {
+		let i = 0
 		const Files = readdirSync(join(__dirname, dir))
 		if (!Files.length)
 			return console.warn(
@@ -42,7 +39,8 @@ export class Handlers {
 			const FileStats = lstatSync(join(__dirname, dir, File))
 
 			if (FileStats.isDirectory()) {
-				await this.Commands(join(dir, File))
+				const tosum = await this.Commands(join(dir, File))
+				if(typeof tosum === 'number')i += tosum
 			} else {
 				if (!File.endsWith('.js')) continue
 
@@ -52,12 +50,15 @@ export class Handlers {
 				const Command = new CommandClass(this.client) as GeneralCommand
 
 				this.client.commands.set(Command.name, Command)
-				this.CommandsLoaded++
+				i++
 			}
 		}
+
+		return i
 	}
 
-	private async Events(dir = '../Events'): Promise<void> {
+	private async Events(dir = '../Events'): Promise<number|void> {
+		let i = 0
 		const Files = readdirSync(join(__dirname, dir))
 		if (!Files.length)
 			return console.warn(
@@ -68,7 +69,8 @@ export class Handlers {
 			const FileStats = lstatSync(join(__dirname, dir, File))
 
 			if (FileStats.isDirectory()) {
-				await this.Events(join(dir, File))
+				const tosum = await this.Events(join(dir, File))
+				if(typeof tosum === 'number')i += tosum
 			} else {
 				if (!File.endsWith('.js')) continue
 
@@ -77,9 +79,11 @@ export class Handlers {
 				)
 				const EventName = File.substring(0, File.indexOf('.js'))
 
-				this.EventsLoaded++
+				i++
 				this.client.on(EventName, Event.run.bind(null, this.client))
 			}
 		}
+
+		return i
 	}
 }

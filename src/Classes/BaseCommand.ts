@@ -75,6 +75,9 @@ export class BaseCommand {
 		this.memberPermissions = []
 		this.memberChannelPermissions = []
 
+		if((options as any)?.usage)this.usage = (options as any).usage
+		if((options as any)?.example)this.example = (options as any).example
+
 		this.HandlePermissions(options)
 	}
 

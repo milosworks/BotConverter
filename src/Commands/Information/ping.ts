@@ -1,6 +1,6 @@
-import { ConverterContext } from '../Classes/ConverterContext.js'
-import { Command } from '../Classes/Command.js'
-import { ConverterClient } from '../Classes/ConverterClient.js'
+import { ConverterContext } from '../../Classes/ConverterContext.js'
+import { Command } from '../../Classes/Command.js'
+import { ConverterClient } from '../../Classes/ConverterClient.js'
 
 export default class pingCommand extends Command {
 	constructor(client: ConverterClient) {

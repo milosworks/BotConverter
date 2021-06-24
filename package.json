@@ -13,13 +13,25 @@
 	"author": "Vyrek",
 	"license": "Apache2-0",
 	"dependencies": {
+		"axios": "^0.21.1",
 		"discord.js": "^13.0.0-dev.edf6f0ca7012b6b678367a1b5d716d0b85e23ba3",
 		"dotenv": "^10.0.0",
+		"execa": "^5.1.1",
+		"file-type": "^16.5.0",
+		"gifsicle": "^5.2.0",
+		"is-svg": "^4.3.1",
+		"jimp": "^0.16.1",
 		"kufa": "^1.5.7",
-		"phin": "^3.6.0"
+		"media-extractor": "^1.1.3",
+		"node-svg2img": "^1.1.0",
+		"sharp": "^0.28.3",
+		"twemoji-parser": "^13.1.0"
 	},
 	"devDependencies": {
+		"@types/gifsicle": "^5.2.0",
 		"@types/node": "^15.12.4",
+		"@types/sharp": "^0.28.3",
+		"@types/twemoji-parser": "^13.1.0",
 		"@typescript-eslint/eslint-plugin": "^4.28.0",
 		"@typescript-eslint/parser": "^4.28.0",
 		"eslint": "^7.29.0",
