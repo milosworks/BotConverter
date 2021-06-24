@@ -1,15 +1,18 @@
 import { KufaConsole } from 'kufa'
+import { config as InitializeENV } from 'dotenv'
+
+if (!process.env.TOKEN) InitializeENV()
 
 export const Client = {
 	prefix: 'cb.',
-	support: 'https://discord.gg/gc2rRwVFUF'
+	support: 'https://discord.gg/gc2rRwVFUF',
+	invite: process.env.INVITE
 }
 
 export const console = new KufaConsole({
 	timeZone: 'America/Mexico_City',
 	onlyHours: true,
-	traceFun: true,
-	format: '[§a%time%§r] [%prefix%§r] %message% %trace% %memory%',
+	format: '[§a%time%§r] [%prefix%§r] %message% %memory%',
 	log_prefix: '§2LOG',
 	warn_prefix: '§6WARN',
 	error_prefix: '§4ERROR',
@@ -27,7 +30,7 @@ export const console = new KufaConsole({
 				.filter((x) => x.length > 0)
 				.join(' ')
 			ctx.time = parsed
-			ctx.format = '[§a%time%§r] [%prefix%§r] %message% %trace% %memory%'
+			ctx.format = `[§a%time%§r] [%prefix%§r] %message% ${ctx.trace} %memory%`
 		}
 	}
 })

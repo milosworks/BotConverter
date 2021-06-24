@@ -1,6 +1,6 @@
-import { ConverterClient } from './Classes/ConverterClient'
-import { Handlers } from './Classes/Handlers'
-import './Typings'
+import { ConverterClient } from './Classes/ConverterClient.js'
+import { Handlers } from './Classes/Handlers.js'
+import './Lib/console.js'
 
 const Client = new ConverterClient({
 	intents: [13825],

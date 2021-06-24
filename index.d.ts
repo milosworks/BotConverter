@@ -5,6 +5,7 @@ declare global {
 		interface ProcessENV {
 			TOKEN: string
 			DEVS: string
+			INVITE: string
 		}
 
 		interface Global {

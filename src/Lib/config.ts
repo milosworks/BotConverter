@@ -1,6 +1,6 @@
 import { config as InitializeENV } from 'dotenv'
 
-InitializeENV()
+if (!process.env.TOKEN) InitializeENV()
 
 export const Config = {
 	token: process.env.TOKEN,

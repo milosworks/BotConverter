@@ -19,9 +19,10 @@ import {
 	APIInteractionGuildMember,
 	APIMessage as RawMessage
 } from 'discord-api-types'
-import { ConverterClient } from './ConverterClient'
-import * as Constants from '../Lib/constants'
-import { Config } from '../Lib/config'
+import { ConverterClient } from './ConverterClient.js'
+import * as Constants from '../Lib/constants.js'
+import { Config } from '../Lib/config.js'
+import { constants } from 'fs'
 
 type Options = 'boterror' | 'error' | 'info' | 'good' | undefined
 
@@ -124,12 +125,16 @@ export class ConverterContext {
 export class ConverterSlashContext {
 	interaction: CommandInteraction
 	client: ConverterClient
-	constants: typeof Constants
+	constants: typeof constants
 
 	constructor(client: ConverterClient, interaction: CommandInteraction) {
 		this.interaction = interaction
 		this.client = client
-		this.constants = Constants
+		this.constants = constants
+	}
+
+	get config(): typeof Config {
+		return Config
 	}
 
 	get options(): Collection<string, CommandInteractionOption> {

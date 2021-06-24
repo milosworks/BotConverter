@@ -1,6 +1,6 @@
 import { Client, ClientOptions, Collection } from 'discord.js'
-import { Config } from '../Lib/config'
-import { Command } from './Command'
+import { Config } from '../Lib/config.js'
+import { Command } from './Command.js'
 
 export class ConverterClient extends Client {
 	commands: Collection<string, Command>

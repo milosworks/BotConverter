@@ -1,7 +1,10 @@
 import { lstatSync, readdirSync } from 'fs'
 import { join } from 'path'
-import { ConverterClient } from './ConverterClient'
-import { Command as GeneralCommand } from './Command'
+import { ConverterClient } from './ConverterClient.js'
+import { Command as GeneralCommand } from './Command.js'
+import Commons from '../Lib/commons.js'
+
+const { __dirname } = Commons(import.meta.url)
 
 export class Handlers {
 	client: ConverterClient
@@ -13,12 +16,16 @@ export class Handlers {
 		this.CommandsLoaded = 0
 		this.EventsLoaded = 0
 
-		this.Commands().then(() =>
-			console.log(`§c${this.CommandsLoaded}§f commands are loaded`)
-		)
-		this.Events().then(() =>
-			console.log(`§c${this.EventsLoaded}§f events are now listening`)
-		)
+		this.Commands()
+			.then(() =>
+				console.log(`§c${this.CommandsLoaded}§r commands are loaded`)
+			)
+			.catch(console.error)
+		this.Events()
+			.then(() =>
+				console.log(`§c${this.EventsLoaded}§r events are now listening`)
+			)
+			.catch(console.error)
 	}
 
 	private async Commands(dir = '../Commands'): Promise<void> {
@@ -28,7 +35,7 @@ export class Handlers {
 				`There is no commands in the folder: §b${join(
 					__dirname,
 					dir
-				)}§f`
+				)}§r`
 			)
 
 		for (const File of Files) {
@@ -40,7 +47,7 @@ export class Handlers {
 				if (!File.endsWith('.js')) continue
 
 				const { default: CommandClass } = await import(
-					join(__dirname, dir, File)
+					`file://${join(__dirname, dir, File)}`
 				)
 				const Command = new CommandClass(this.client) as GeneralCommand
 
@@ -54,7 +61,7 @@ export class Handlers {
 		const Files = readdirSync(join(__dirname, dir))
 		if (!Files.length)
 			return console.warn(
-				`The is no events on the folder: §b${join(__dirname, dir)}§f`
+				`The is no events on the folder: §b${join(__dirname, dir)}§r`
 			)
 
 		for (const File of Files) {
@@ -65,7 +72,9 @@ export class Handlers {
 			} else {
 				if (!File.endsWith('.js')) continue
 
-				const Event = await import(join(__dirname, dir, File))
+				const Event = await import(
+					`file://${join(__dirname, dir, File)}`
+				)
 				const EventName = File.substring(0, File.indexOf('.js'))
 
 				this.EventsLoaded++

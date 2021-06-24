@@ -1,49 +1,20 @@
-import { ConverterClient } from './ConverterClient.js'
-import { CommandOptions, BaseCommand } from './BaseCommand.js'
-import { ConverterContext } from './ConverterContext.js'
 import { GuildMember } from 'discord.js'
+import { BaseCommand, SlashCommandOptions } from './BaseCommand.js'
+import { ConverterClient } from './ConverterClient.js'
+import { ConverterSlashContext } from './ConverterContext.js'
 
-export class Command extends BaseCommand {
-	constructor(Client: ConverterClient, options: CommandOptions) {
-		super(Client, options)
+export class BaseSlashCommand extends BaseCommand {
+	constructor(client: ConverterClient, options: SlashCommandOptions) {
+		super(client, options)
 	}
 
-	canRun(context: ConverterContext): any {
+	canRun(context: ConverterSlashContext): any {
 		const isDev = context.config.devs?.includes(context.user.id)
 
 		if (!context.guild && this.onlyGuild) {
 			return context
 				.embedRes('This command can only runned in a guild!', 'error')
 				.catch(() => true)
-		} else if (
-			!context.guild?.me?.permissions.has('SEND_MESSAGES') ||
-			!context.guild.me
-				.permissionsIn(context.channel)
-				.has('SEND_MESSAGES')
-		) {
-			try {
-				if (
-					context.guild?.me?.permissions.has('ADD_REACTIONS') &&
-					context.guild.me
-						.permissionsIn(context.channel)
-						.has('ADD_REACTIONS')
-				) {
-					context.msg.react('✍️')
-					context.msg.react('❌')
-				} else {
-					return context.user.send({
-						embeds: [
-							context.embedRes(
-								'I cant talk in that channel!',
-								'info',
-								false
-							)
-						]
-					})
-				}
-			} catch (e) {
-				return true
-			}
 		} else if (this.dev && !isDev)
 			return context.embedRes(
 				'This command is only for developers',

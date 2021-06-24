@@ -1,6 +1,13 @@
-import { PermissionResolvable } from 'discord.js'
-import { ConverterClient } from './ConverterClient'
-import { Utils } from './Utils'
+import {
+	PermissionResolvable,
+	GuildMember,
+	ChannelResolvable
+} from 'discord.js'
+import { ConverterClient } from './ConverterClient.js'
+import { ConverterContext, ConverterSlashContext } from './ConverterContext.js'
+import { Utils } from './Utils.js'
+
+export type SlashCommandOptions = Omit<CommandOptions, 'usage' | 'example'>
 
 export interface CommandOptions {
 	name: string
@@ -47,7 +54,10 @@ export class BaseCommand {
 
 	/* eslint-enable no-unused-vars */
 
-	constructor(client: ConverterClient, options: CommandOptions) {
+	constructor(
+		client: ConverterClient,
+		options: CommandOptions | SlashCommandOptions
+	) {
 		this.client = client
 		this.name = options.name
 		this.category = options.category
@@ -68,7 +78,46 @@ export class BaseCommand {
 		this.HandlePermissions(options)
 	}
 
-	private HandlePermissions(options: CommandOptions) {
+	LostPermissions(
+		AllPerms: PermissionResolvable[],
+		member: GuildMember,
+		channel?: ChannelResolvable
+	): PermissionResolvable[] {
+		const LostPerms: PermissionResolvable[] = []
+
+		for (const Perm of AllPerms) {
+			if (channel) {
+				if (
+					!member.permissionsIn(channel).has(Perm) &&
+					!LostPerms.includes(Perm)
+				)
+					LostPerms.push(Perm)
+			} else {
+				if (!member.permissions.has(Perm) && !LostPerms.includes(Perm))
+					LostPerms.push(Perm)
+			}
+		}
+
+		return LostPerms
+	}
+
+	GetCooldown(context: ConverterContext | ConverterSlashContext): boolean {
+		const Cooldown = this.cooldowns.get(context.user.id)
+		if (Cooldown) return true
+
+		this.cooldowns.set(context.user.id, {
+			advised: true,
+			date: this.cooldown * 1000 + Date.now()
+		})
+
+		setTimeout(() => {
+			this.cooldowns.delete(context.user.id)
+		}, this.cooldown * 1000)
+
+		return false
+	}
+
+	private HandlePermissions(options: CommandOptions | SlashCommandOptions) {
 		if (options.botPermissions && options.botPermissions.length) {
 			this.botPermissions = options.botPermissions
 		}
