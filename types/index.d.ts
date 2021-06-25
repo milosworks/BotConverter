@@ -13,9 +13,3 @@ declare global {
 		}
 	}
 }
-
-declare module 'discord-api-types' {
-	type Snowflake = string
-}
-
-declare module 'node-svg2img' {}
