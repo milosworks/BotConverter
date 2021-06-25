@@ -3,52 +3,29 @@ import Extensions from 'file-type'
 import isSvg from 'is-svg'
 import svg2img_pre from 'node-svg2img'
 import { promisify } from 'util'
-import { MessageAttachment } from 'discord.js'
 import Resize from '../Lib/gifresize.js'
 
 const svg2img = promisify(svg2img_pre as any)
 
-type AttachmentResolvable = string | MessageAttachment
-
-interface EmojifyOBJ {
+interface BufferOBJ {
 	type: string
 	buffer: any
 }
 
-export class Converters {
-	constructor() {
-		throw new Error('This class cannot be instanced')
-	}
+interface EmojifyOptions {
+	width: number
+	height: number
+}
 
-	static ParseAttachmentResolvable(
-		AttachmentOrString: AttachmentResolvable
-	): string {
-		if (AttachmentOrString instanceof MessageAttachment)
-			return AttachmentOrString.url
-		else {
-			return AttachmentOrString
-		}
-	}
-
-	static toPNG(src: AttachmentResolvable): MessageAttachment {
-		const ToPNG = new MessageAttachment(
-			Converters.ParseAttachmentResolvable(src),
-			'image.png'
-		)
-		return ToPNG
-	}
-
-	static toGIF(src: AttachmentResolvable): MessageAttachment {
-		const ToGIF = new MessageAttachment(
-			Converters.ParseAttachmentResolvable(src),
-			'image.gif'
-		)
-		return ToGIF
-	}
+export default new (class Converters {
+	constructor() {}
 
 	//Copied from https://github.com/AndreMor8/gidget/blob/master/src/commands/image/emojify.js
-	static async toEmojify(src: string, resize = false): Promise<EmojifyOBJ> {
-		const Res = await ax(src, {
+	async GetImageBuffer(
+		Src: string,
+		Additions?: EmojifyOptions
+	): Promise<BufferOBJ> {
+		const Res = await ax(Src, {
 			method: 'GET',
 			responseType: 'arraybuffer'
 		})
@@ -58,25 +35,22 @@ export class Converters {
 		const LoadBuffer = Buffer.from(Res.data, 'binary')
 		const Ext = await Extensions.fromBuffer(LoadBuffer)
 		if (Ext?.mime === 'image/gif') {
-			if (!resize) {
+			if (!Additions?.width) {
 				return { type: 'gif', buffer: LoadBuffer }
 			}
 
-			const Buffer = await Resize({ width: 48, interlanced: true })(
-				LoadBuffer
-			)
+			const Buffer = await Resize({
+				width: Additions.width,
+				interlanced: true
+			})(LoadBuffer)
 
 			return { type: 'gif', buffer: Buffer }
 		} else if (isSvg(LoadBuffer)) {
-			const options = resize
-				? {
-						format: 'png',
-						width: 48,
-						height: 48
-				  }
-				: {
-						format: 'png'
-				  }
+			const options = {
+				format: 'png',
+				width: Additions?.width,
+				height: Additions?.height
+			}
 
 			const Buffer = await svg2img(LoadBuffer, options)
 
@@ -84,7 +58,7 @@ export class Converters {
 		} else if (process.platform === 'win32') {
 			const { default: JIMP } = await import('jimp')
 			const IMG = await JIMP.read(LoadBuffer)
-			if (resize) IMG.resize(48, JIMP.AUTO)
+			if (Additions?.width) IMG.resize(Additions.width, JIMP.AUTO)
 
 			const Buffer = await IMG.getBufferAsync(JIMP.MIME_PNG)
 
@@ -92,11 +66,12 @@ export class Converters {
 		} else {
 			const { default: Sharp } = await import('sharp')
 			const Buffer = await Sharp(LoadBuffer)
-			if (resize) Buffer.resize(48)
+			if (Additions?.width)
+				Buffer.resize(Additions.width, Additions.height)
 
 			Buffer.png().toBuffer()
 
 			return { type: 'image', buffer: Buffer }
 		}
 	}
-}
+})()
