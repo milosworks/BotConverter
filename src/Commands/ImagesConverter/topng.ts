@@ -1,21 +1,20 @@
-import { MessageAttachment } from 'discord.js'
 import { ConverterContext } from '../../Classes/ConverterContext.js'
 import { Command } from '../../Classes/Command.js'
 import { ConverterClient } from '../../Classes/ConverterClient.js'
 import Converters from '../../Classes/Converters.js'
 import { GetURL } from '../../Lib/GetURL.js'
+import { MessageAttachment } from 'discord.js'
 
-export default class togifCommand extends Command {
+export default class topngCommand extends Command {
 	constructor(client: ConverterClient) {
 		super(client, {
-			name: 'togif',
-			description:
-				'Converts an image to gif. (This command does **NOT** resize images)',
+			name: 'topng',
+			description: 'Converts any image to png',
 			category: 'images',
 			usage: (prefix) =>
-				`${prefix}togif <url/emoji/attachment/user/guildID> [--name <Image Name>]`,
+				`${prefix}topng <url/emoji/attachment/user/guildID> [--name <Image Name>]`,
 			example: (prefix) =>
-				`${prefix}togif https://vyrekxd.is-inside.me/CydkJGdZ.png\n${prefix}emojify :_XD:\n${prefix}emojify :_XD: --name my-gif\n${prefix}emojify <attach an image>\n${prefix}emojify @Vyrek\n${prefix}emojify 761370919419117598`
+				`${prefix}topng https://vyrekxd.is-inside.me/CydkJGdZ.png\n${prefix}topng https://vyrekxd.is-inside.me/CydkJGdZ.png --name my-image\n${prefix}emojify :_XD:\n${prefix}emojify <attach an image>\n${prefix}emojify @Vyrek\n${prefix}emojify 761370919419117598`
 		})
 	}
 
@@ -32,10 +31,10 @@ export default class togifCommand extends Command {
 		if (!Src) return ctx.embedRes('You need to put a valid link', 'error')
 
 		const Name =
-			ctx.args[1] === '--name' ? ctx.args[2] ?? 'my-gif' : 'my-gif'
+			ctx.args[1] === '--name' ? ctx.args[2] ?? 'my-image' : 'my-image'
 		const { buffer } = await Converters.GetImageBuffer(Src)
-		const Attachment = new MessageAttachment(buffer, `${Name}.gif`)
+		const Attach = new MessageAttachment(buffer, `${Name}.png`)
 
-		await ctx.send({ files: [Attachment] })
+		await ctx.send({ files: [Attach] })
 	}
 }
