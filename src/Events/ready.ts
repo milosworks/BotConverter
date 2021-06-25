@@ -8,6 +8,12 @@ export const run = (Converter: ConverterClient): void => {
 		`${Converter.users.cache.size} users aprox.`
 	]
 
+	const Status = Statuses[Math.floor(Math.random() * Statuses.length)]
+	Converter.user?.setPresence({
+		status: 'dnd',
+		activities: [{ name: Status, type: 'WATCHING' }]
+	})
+
 	setInterval(() => {
 		const Status = Statuses[Math.floor(Math.random() * Statuses.length)]
 		Converter.user?.setPresence({
