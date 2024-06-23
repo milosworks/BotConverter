@@ -1,16 +1,42 @@
-import { ConverterClient } from './Classes/ConverterClient.js'
-import { Handlers } from './Classes/Handlers.js'
-import './Lib/console.js'
+import {
+	Client,
+	Logger,
+	type ParseClient
+} from 'seyfert';
+import { bgBrightWhite, black, brightBlack } from 'seyfert/lib/common';
+import { formatMemoryUsage } from './common';
 
-const Client = new ConverterClient({
-	intents: [13825],
-	messageCacheMaxSize: 25,
-	messageCacheLifetime: 60 * 5,
-	messageSweepInterval: 60,
-	allowedMentions: { repliedUser: true, parse: ['roles', 'everyone'] },
-	http: {
-		version: 7
+const client = new Client()
+
+Logger.customize((log, lvl, args) => {
+	const date = new Date()
+	const color = Logger.colorFunctions.get(lvl) ?? Logger.noColor;
+
+	return [
+		brightBlack(formatMemoryUsage(process.memoryUsage().rss)),
+		bgBrightWhite(black(`[${date.toLocaleDateString()} ${date.toLocaleTimeString()}]`)),
+		color(Logger.prefixes.get(lvl) ?? 'DEBUG'),
+		'[BotConverter] >',
+		...args,
+	];
+})
+
+client.setServices({
+	handlers: {
+		commands: {
+			onCommand: (file) => {
+				let cmd = new file()
+				cmd.guildId = ['807241041425334323']
+				return cmd
+			}
+		}
 	}
 })
 
-new Handlers(Client)
+client.start().then(() => {
+	client.uploadCommands().catch(console.error)
+})
+
+declare module 'seyfert' {
+	interface UsingClient extends ParseClient<Client<true>> {}
+}

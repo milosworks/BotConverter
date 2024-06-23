@@ -1,24 +1,8 @@
-import { ConverterClient } from '../Classes/ConverterClient.js'
+import { createEvent } from 'seyfert'
 
-export const run = (Converter: ConverterClient): void => {
-	console.log(`Client §2${Converter.user?.tag}§r is ready`)
-
-	const Statuses = [
-		'files to convert.',
-		`${Converter.users.cache.size} users aprox.`
-	]
-
-	const Status = Statuses[Math.floor(Math.random() * Statuses.length)]
-	Converter.user?.setPresence({
-		status: 'dnd',
-		activities: [{ name: Status, type: 'WATCHING' }]
-	})
-
-	setInterval(() => {
-		const Status = Statuses[Math.floor(Math.random() * Statuses.length)]
-		Converter.user?.setPresence({
-			status: 'dnd',
-			activities: [{ name: Status, type: 'WATCHING' }]
-		})
-	}, 40000)
-}
+export default createEvent({
+	data: { once: true, name: 'botReady' },
+	run(user, client) {
+		client.logger.info(`${user.username} is ready`)
+	}
+})
